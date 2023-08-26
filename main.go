@@ -8,22 +8,32 @@ import (
 	"github.com/arielsrv/go-await/async"
 )
 
-func SomeTask() int {
-	log.Println("Warming up ...")
-	time.Sleep(3 * time.Second)
-	log.Println("Done ...")
-	return 1
-}
-
 func main() {
+	f := func() string {
+		log.Println("Warming up ...")
+		time.Sleep(3 * time.Second)
+		log.Println("Done ...")
+		return "Hello world!"
+	}
+
+	// Without context
+	log.Println("Let's start ...")
+	future := async.Run(func() any {
+		return f()
+	})
+	log.Println("Running ...")
+	value := future.Await()
+	log.Println(value)
+
+	// With context
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
 	log.Println("Let's start ...")
-	future := async.RunWithContext(ctx, func() any {
-		return SomeTask()
+	future = async.RunWithContext(ctx, func() any {
+		return f()
 	})
 	log.Println("Running ...")
-	value := future.AwaitWithContext(ctx)
+	value = future.AwaitWithContext(ctx)
 	log.Println(value)
 }
