@@ -1,0 +1,56 @@
+# yaml-language-server: $schema=https://json.schemastore.org/taskfile.json
+version: '3'
+
+env:
+  SOURCE_FOLDER: ./...
+
+tasks:
+  quality:lint:
+    desc: Use golangci-lint (.golangci.yml).
+    cmds:
+      - golangci-lint run --fix
+
+  quality:unit_test:
+    desc: Run test.
+    cmds:
+      - go test ./...
+
+  quality:race_test:
+    desc: Run race test.
+    cmds:
+      - go test -race ./...
+
+  packages:download:
+    desc: Run go mod tidy.
+    cmds:
+      - go mod tidy
+
+  packages:upgrade:
+    desc: Check for latest direct dependencies.
+    cmds:
+      - go-mod-upgrade
+
+  build:
+    desc: Build sources
+    cmds:
+      - echo "OS:" {{OS}}, "ARCH:" {{ARCH}}
+      - go build -v $SOURCE_FOLDER
+
+  run:
+    desc: main()
+    cmds:
+      - go run cmd/program.go
+
+  all:
+    desc: Run relevant tasks.
+    cmds:
+      - task: packages:download
+      - task: build
+      - task: quality:unit_test
+      - task: quality:race_test
+      - task: quality:lint
+
+  default:
+    desc: Run [all].
+    cmds:
+      - task: all
