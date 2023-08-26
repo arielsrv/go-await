@@ -5,7 +5,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/arielsrv/go-async/async"
+	"github.com/arielsrv/go-await/async"
 	"github.com/stretchr/testify/assert"
 )
 

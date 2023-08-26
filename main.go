@@ -5,7 +5,7 @@ import (
 	"log"
 	"time"
 
-	"github.com/arielsrv/go-async/async"
+	"github.com/arielsrv/go-await/async"
 )
 
 func SomeTask() int {

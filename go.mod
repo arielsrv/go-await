@@ -1,4 +1,4 @@
-module github.com/arielsrv/go-async
+module github.com/arielsrv/go-await
 
 go 1.21
 
